@@ -1,0 +1,7 @@
+drop http any any -> any any (msg:"SQL Injection Detected Attack 1"; content:"SELECT * FROM users"; http_client_body; sid:100001;)
+drop http any any -> any any (msg:"SQL Injection Detected Login Bypass"; content:"admin' OR ''='"; http_client_body; sid:100002;)
+
+drop tcp any any -> any 80 (msg:"SYN Flood detected on port 443"; flags:S; flow:to_server,stateless; threshold:type threshold, track by_src, count 20, seconds 1; sid:100003; rev:2;)
+drop udp any any -> any 80 (msg:"DoS UDP flood attempt"; flow:to_server,stateless; threshold:type threshold, track by_src, count 100, seconds 5; sid:100004; rev:1;)
+
+drop tcp any any -> any 443 (msg:"BLOCK NMAP -sS simple"; flags:S; flow:to_server,stateless; sid:100005; rev:1;)
